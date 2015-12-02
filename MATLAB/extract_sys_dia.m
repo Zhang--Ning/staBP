@@ -1,5 +1,4 @@
 function [sys, dia, systimes, diatimes] = extract_sys_dia(blood_pressure, threshold)
-    %simplePeakDetector Return times and voltages of samples above threshold 9
     sys = [];
     dia = [];
     systimes = [];
