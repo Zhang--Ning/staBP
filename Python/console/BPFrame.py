@@ -1,5 +1,11 @@
 import wx
-import bp_elements
+import BPNav
+import time
+
+from BPPositionPanel import PositionPanel
+from BPCalibratePanel import CalibratePanel
+from BPFIHPPanel import FIHPPanel
+from BPMonitorPanel import MonitorPanel
 
 class BPFrame(wx.Frame):
   def __init__(self):
@@ -27,28 +33,41 @@ class BPFrame(wx.Frame):
     self.SetSizer(self.sizer)
 
     ## Set up navigation bar
-    self.navigation_bar = bp_elements.NavBar(self)
+    self.navigation_bar = BPNav.NavBar(self)
 
     ## Set up main panel
-    self.position_panel = bp_elements.PositionPanel(self, self.GoToCalibrate)
-    self.calibrate_panel = bp_elements.CalibratePanel(self, self.GoToMonitor)
-    self.monitor_panel = bp_elements.MonitorPanel(self)
-    self.calibrate_panel.Show(False)
+    self.position_panel = PositionPanel(self, self.GoToFIHP)
 
     self.sizer.Add(self.navigation_bar, 1, flag=wx.EXPAND)
     self.sizer.Add(self.position_panel, 3, flag=wx.EXPAND)
+
+    # self.GoToFIHP()
+    # time.sleep(0.5)
+    # self.GoToCalibrate()
+    # time.sleep(0.5)
+    # self.GoToMonitor()
+    # time.sleep(0.5)
     
     self.Show(True)
 
-  def GoToCalibrate(self, event):
+  def GoToFIHP(self):
     self.position_panel.Show(False)
-    self.calibrate_panel.Show(True)
+    self.fihp_panel = FIHPPanel(self, self.GoToCalibrate)
     self.sizer.Remove(self.position_panel)
+    self.sizer.Add(self.fihp_panel, 3, flag=wx.EXPAND)
+    self.sizer.Layout()
+    self.navigation_bar.SelectItem(1)
+
+  def GoToCalibrate(self):
+    self.fihp_panel.Show(False)
+    self.calibrate_panel = CalibratePanel(self, self.GoToMonitor)
+    self.sizer.Remove(self.fihp_panel)
     self.sizer.Add(self.calibrate_panel, 3, flag=wx.EXPAND)
     self.sizer.Layout()
     self.navigation_bar.SelectItem(1)
 
-  def GoToMonitor(self, event):
+  def GoToMonitor(self):
+    self.monitor_panel = MonitorPanel(self)
     self.calibrate_panel.Show(False)
     self.sizer.Remove(self.calibrate_panel)
     self.sizer.Add(self.monitor_panel, 3, flag=wx.EXPAND)
