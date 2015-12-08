@@ -7,14 +7,15 @@
 #define DC A0
 #define BT_CONNECTED 2
 #define BT_ENABLE 3
-#define SAMPLING_RATE_HZ 200
+#define SAMPLING_RATE_HZ 100
 
 #define FORWARD_DIR -1
 
 #define AD_PER_STEP 10
-#define AD_DELAY 10
+#define AD_DELAY 40
 
 int motor_state = 0;
+unsigned long last_sent = 0;
 
 void setup() {
   // put your setup code here, to run once:
@@ -31,12 +32,15 @@ void setup() {
   delay(100);
   Serial.write("AT+RICD+\r");
   Serial.flush();
+  delay(100);
+  Serial.write("AT+NAME=BPMeasure\r");
+  Serial.flush();
+  delay(100);
 }
 
 void loop() {
-  if(digitalRead(2) == LOW) {
+  if(digitalRead(2) == LOW && Serial) {
     checkForCommands();
-    static int last_sent = millis();
     if((millis() - last_sent) >= (1000/SAMPLING_RATE_HZ)) {
       sendACDCVoltages();
       last_sent = millis();
@@ -63,16 +67,17 @@ void checkForCommands() {
       default:
         break;
     }
+    Serial.print("\r");
   }
 }
 
 void sendACDCVoltages() {
   int ac_voltage = analogRead(AC);
   int dc_voltage = analogRead(DC);
-  Serial.write("AC");
-  Serial.write(ac_voltage);
-  Serial.write("DC");
-  Serial.write(dc_voltage);
+  Serial.print(ac_voltage);
+  Serial.print(",");
+  Serial.print(dc_voltage);
+  Serial.print("\n");
   Serial.flush();
 }
 
@@ -100,13 +105,13 @@ void advanceMotor(int direction) {
   }
   switch (motor_state) {
     case 0:
-      digitalWrite(COIL1, HIGH);
+      digitalWrite(COIL2, HIGH);
       break;
     case 1:
-      digitalWrite(COIL3, HIGH);
+      digitalWrite(COIL1, HIGH);
       break;
     case 2:
-      digitalWrite(COIL2, HIGH);
+      digitalWrite(COIL3, HIGH);
       break;
     case 3:
       digitalWrite(COIL4, HIGH);

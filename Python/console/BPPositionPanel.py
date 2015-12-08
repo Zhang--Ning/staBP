@@ -1,5 +1,5 @@
 import wx
-from BPUtil import ContinueButton
+from BPUtil import Button
 
 class PositionPanel(wx.Panel):
   def __init__(self, parent, doneFunc):
@@ -26,7 +26,7 @@ class PositionPanel(wx.Panel):
     self.directionsText.SetFont(wx.Font(16, wx.FONTFAMILY_DEFAULT, wx.NORMAL, wx.LIGHT, faceName="Helvetica Neue"))
     self.directionsText.SetForegroundColour(wx.Colour(83, 83, 83))
 
-    self.continueText = ContinueButton(self.textPanel, doneFunc)
+    self.continueText = Button(self.textPanel, doneFunc)
 
     self.textPanel.GetSizer().Add(self.directionsText, 2)
     self.textPanel.GetSizer().AddStretchSpacer(1)

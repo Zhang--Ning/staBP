@@ -1,8 +1,8 @@
 import wx
 
-class ContinueButton(wx.StaticText):
-  def __init__(self, parent, clickHandler):
-    wx.StaticText.__init__(self, parent, label="Continue \xe2\x9e\x94")
+class Button(wx.StaticText):
+  def __init__(self, parent, clickHandler, textlabel="Continue"):
+    wx.StaticText.__init__(self, parent, label=textlabel + " \xe2\x9e\x94")
     self.font = wx.Font(12, wx.FONTFAMILY_DEFAULT, wx.NORMAL, wx.NORMAL, faceName="Helvetica Neue")
     self.color_normal = wx.Colour(0, 209, 245)
     self.color_hover = wx.Colour(0, 167, 195)
@@ -42,7 +42,7 @@ class InputText(wx.Panel):
     self.SetSizer(self.sizer)
 
 class Scale(wx.Panel):
-    def __init__(self, parent, maxText, minText, align):
+    def __init__(self, parent, maxText, minText, align, ticks=True):
         wx.Panel.__init__(self, parent)
 
         scalefont = wx.Font(12, wx.FONTFAMILY_DEFAULT, wx.NORMAL, wx.LIGHT, faceName="Helvetica Neue")
@@ -52,17 +52,18 @@ class Scale(wx.Panel):
         self.onehundred.SetFont(scalefont)
         self.onehundred.SetForegroundColour(scalecolor)
 
-        self.seventyfive = wx.StaticText(self, label="-")
-        self.seventyfive.SetFont(scalefont)
-        self.seventyfive.SetForegroundColour(scalecolor)
+        if(ticks):
+            self.seventyfive = wx.StaticText(self, label="-")
+            self.seventyfive.SetFont(scalefont)
+            self.seventyfive.SetForegroundColour(scalecolor)
 
-        self.fifty = wx.StaticText(self, label="-")
-        self.fifty.SetFont(scalefont)
-        self.fifty.SetForegroundColour(scalecolor)
+            self.fifty = wx.StaticText(self, label="-")
+            self.fifty.SetFont(scalefont)
+            self.fifty.SetForegroundColour(scalecolor)
 
-        self.twentyfive = wx.StaticText(self, label="-")
-        self.twentyfive.SetFont(scalefont)
-        self.twentyfive.SetForegroundColour(scalecolor)
+            self.twentyfive = wx.StaticText(self, label="-")
+            self.twentyfive.SetFont(scalefont)
+            self.twentyfive.SetForegroundColour(scalecolor)
 
         self.zero = wx.StaticText(self, label=minText)
         self.zero.SetFont(scalefont)
@@ -72,17 +73,21 @@ class Scale(wx.Panel):
 
         self.sonehundred = wx.BoxSizer(wx.HORIZONTAL)
         self.sonehundred.Add(self.onehundred, 1, wx.ALIGN_TOP)
-        self.sseventyfive = wx.BoxSizer(wx.HORIZONTAL)
-        self.sseventyfive.Add(self.seventyfive, 1, wx.CENTER)
-        self.sfifty = wx.BoxSizer(wx.HORIZONTAL)
-        self.sfifty.Add(self.fifty, 1, wx.CENTER)
-        self.stwentyfive = wx.BoxSizer(wx.HORIZONTAL)
-        self.stwentyfive.Add(self.twentyfive, 1, wx.CENTER)
+
+        if(ticks):
+            self.sseventyfive = wx.BoxSizer(wx.HORIZONTAL)
+            self.sseventyfive.Add(self.seventyfive, 1, wx.CENTER)
+            self.sfifty = wx.BoxSizer(wx.HORIZONTAL)
+            self.sfifty.Add(self.fifty, 1, wx.CENTER)
+            self.stwentyfive = wx.BoxSizer(wx.HORIZONTAL)
+            self.stwentyfive.Add(self.twentyfive, 1, wx.CENTER)
+
         self.szero = wx.BoxSizer(wx.HORIZONTAL)
         self.szero.Add(self.zero, 1, wx.ALIGN_BOTTOM)
 
         self.GetSizer().Add(self.sonehundred, 0, align)
-        self.GetSizer().Add(self.sseventyfive, 1, align)
-        self.GetSizer().Add(self.sfifty, 1, align)
-        self.GetSizer().Add(self.stwentyfive, 1, align)
+        if(ticks):
+            self.GetSizer().Add(self.sseventyfive, 1, align)
+            self.GetSizer().Add(self.sfifty, 1, align)
+            self.GetSizer().Add(self.stwentyfive, 1, align)
         self.GetSizer().Add(self.szero, 1, align)

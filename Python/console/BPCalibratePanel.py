@@ -1,5 +1,5 @@
 import wx
-from BPUtil import InputText, ContinueButton
+from BPUtil import InputText, Button
 
 class CalibratePanel(wx.Panel):
   def __init__(self, parent, doneFunc):
@@ -56,7 +56,8 @@ class CalibratePanel(wx.Panel):
     self.bpInputPanel.GetSizer().AddStretchSpacer(1)
     self.bpInputPanel.GetSizer().Add(self.bpInputFieldPanel, 4)
 
-    self.continueText = ContinueButton(self.textPanel, doneFunc)
+    self.doneFunc = doneFunc
+    self.continueText = Button(self.textPanel, self.ContinuePressed)
 
     self.textPanel.GetSizer().Add(self.directionsText, 2)
     self.textPanel.GetSizer().AddStretchSpacer(1)
@@ -73,3 +74,6 @@ class CalibratePanel(wx.Panel):
 
   def GetBP(self):
     return (int(self.systolicField.GetLineText(0)), int(self.diastolicField.GetLineText(0)))
+
+  def ContinuePressed(self):
+    self.doneFunc(self.GetBP())

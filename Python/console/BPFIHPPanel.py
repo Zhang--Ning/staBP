@@ -16,7 +16,7 @@ class LoadingText(wx.StaticText):
         wx.CallLater(300, self.Advance)
 
 class FIHPPanel(wx.Panel):
-    def __init__(self, parent, doneFunc):
+    def __init__(self, parent, doneFunc, test=False):
         wx.Panel.__init__(self, parent)
         self.sizer = wx.BoxSizer(wx.VERTICAL)
         self.SetSizer(self.sizer)
@@ -43,8 +43,9 @@ class FIHPPanel(wx.Panel):
         self.sizer.AddStretchSpacer(1)
 
         self.doneFunc = doneFunc
+        self.test = test
 
-        if True:
+        if self.test:
             self.time = 0
             wx.CallLater(1000, self.NextSim)
 
@@ -59,6 +60,14 @@ class FIHPPanel(wx.Panel):
             self.peakpeakplot.AddNextPeakPeak(self.time*100, 15*(0.25-((self.time-0.5)**2)))
             wx.CallLater(1000, self.NextSim)
 
+    def AddNextPoint(self, motor_percentage, peaktopeak):
+        self.peakpeakplot.AddNextPeakPeak(int(motor_percentage*100), peaktopeak)
+        self.motor.SetProgress(int(motor_percentage*100))
+
+    def Done(self):
+        self.peakpeakplot.Disable()
+        self.doneFunc()
+
 class PeakPlotPanel(wx.Panel):
     def __init__(self, parent):
         wx.Panel.__init__(self, parent)
@@ -70,7 +79,7 @@ class PeakPlotPanel(wx.Panel):
         self.plot.SetMaxSize((-1, -1))
         self.sizer.Add(self.plot, 20, wx.EXPAND)
         self.sizer.AddStretchSpacer(1)
-        self.scale = Scale(self, "200 mmHg", "40 mmHg", wx.ALIGN_LEFT)
+        self.scale = Scale(self, "Volts", "", wx.ALIGN_LEFT, False)
         self.sizer.Add(self.scale, 0, wx.EXPAND)
         self.sizer.AddStretchSpacer(1)
         self.sizer.Layout()
@@ -78,12 +87,15 @@ class PeakPlotPanel(wx.Panel):
         self.xdata = []
         self.ydata = []
 
-        self.plot.StartPlot(self.xdata, self.ydata, (0,100), (0,5), 'ow')
+        self.plot.StartPlot(self.xdata, self.ydata, (0,100), -1, 'ow')
 
     def AddNextPeakPeak(self, motorpos, peaktopeak):
         self.ydata.append(peaktopeak)
         self.xdata.append(motorpos)
         self.plot.UpdatePlot(self.xdata, self.ydata)
+
+    def Disable(self):
+        self.plot.Disable()
 
 class MotorProgress(wx.Panel):
   def __init__(self, parent):
@@ -103,7 +115,7 @@ class MotorProgress(wx.Panel):
     self.progress.SetBackgroundColour(wx.Colour(100, 100, 200))
     self.SetProgress(100)
     
-    if True:
+    if False:
       wx.CallLater(150, self.Advance)
       self.progressPercentage = 0
 
