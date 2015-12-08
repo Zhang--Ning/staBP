@@ -95,7 +95,7 @@ class BPConnection:
       self.lastacdc = current
       [ac1, dc1] = self.acdc.popleft()
       if(self.acdcFunc != None):
-        self.acdcFunc(ac1, dc1)
+        self.acdcFunc(ac1-512, dc1)
 
     if len(self.acdc) > 20:
       self.acdc.clear()

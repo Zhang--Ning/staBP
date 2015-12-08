@@ -32,7 +32,7 @@ class SelectDevicePanel(wx.Panel):
 
 		self.portsList.GetSizer().Clear()
 		for device in devices:
-			self.portsList.GetSizer().Add(Button(self.portsList, lambda: self.PortSelected(device), device), 0, wx.EXPAND | wx.LEFT | wx.TOP, border=10)
+			self.portsList.GetSizer().Add(Button(self.portsList, lambda: self.PortSelected(device), device), 0, wx.LEFT | wx.TOP, border=10)
 
 		self.portsList.GetSizer().Layout()
 

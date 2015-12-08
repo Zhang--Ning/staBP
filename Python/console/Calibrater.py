@@ -81,9 +81,9 @@ class Calibrater:
 		if((average_systole-average_diastole) == 0):
 				average_systole += 0.01
 
-		self.k1 = (self.systolic - self.diastolic)/(average_systole-average_diastole)
-		self.k2 = (self.systolic - (self.k1*average_systole))/average_window
-
+		self.k1 = float((self.systolic - self.diastolic))/(average_systole-average_diastole)
+		self.k2 = float((self.systolic - (self.k1*average_systole)))/average_window
+		print "K1: " + str(self.k1) + ". K2: " + str(self.k2)
 	def mean(self, list):
 		if(len(list) == 0):
 			return 0

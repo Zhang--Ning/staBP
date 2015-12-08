@@ -46,14 +46,20 @@ class PlotPanel(wx.Panel):
         if self.render and len(self.xdata) > 0 and len(self.xdata) == len(self.ydata):
             xlim = list(self.xlim)
             ylim = list(self.ylim)
+            x_range = max(self.xdata)-min(self.xdata)
+            y_range = max(self.ydata)-min(self.ydata)
+            if(x_range == 0):
+                x_range = 1
+            if(y_range == 0):
+                y_range = 1
             if(self.xlim[0] == None):
-                xlim[0] = min(self.xdata)-1
+                xlim[0] = min(self.xdata)-0.1*x_range
             if(self.xlim[1] == None):
-                xlim[1] = max(self.xdata)+1
+                xlim[1] = max(self.xdata)+0.1*x_rage
             if(self.ylim[0] == None):
-                ylim[0] = min(self.ydata)-1
+                ylim[0] = min(self.ydata)-0.1*y_range
             if(self.ylim[1] == None):
-                ylim[1] = max(self.ydata)+1
+                ylim[1] = max(self.ydata)+0.1*y_range
             self.axes.set_xlim(xlim)
             self.axes.set_ylim(ylim)
             self.canvas.draw()

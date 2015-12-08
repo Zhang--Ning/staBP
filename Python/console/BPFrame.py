@@ -21,10 +21,12 @@ class BPFrame(wx.Frame):
     filemenu = wx.Menu()
     exit = filemenu.Append(wx.ID_EXIT, "E&xit")
     recalibrate = filemenu.Append(wx.ID_RESET, "&Recalibrate")
+    findihp = filemenu.Append(wx.ID_NEW, "&Relocate Ideal Hold-Down Pressure")
     menubar = wx.MenuBar()
     menubar.Append(filemenu, "&File")
     self.SetMenuBar(menubar)
     self.Bind(wx.EVT_MENU, self.Recalibrate, recalibrate)
+    self.Bind(wx.EVT_MENU, self.FindIHP, findihp)
     self.Bind(wx.EVT_MENU_HIGHLIGHT, self.MenuHighlighted, menubar)
     self.Bind(wx.EVT_MENU, self.Exit, exit)
 
@@ -115,11 +117,19 @@ class BPFrame(wx.Frame):
     self.calibrater.SetPressureListener(self.monitor_panel.SetPressure)
     self.calibrater.StartRecording()
 
-  def Recalibrate(self, event):
+  def FindIHP(self, event):
+    print "Find IHP"
     if not self.connection.IsConnected():
         return
     self.ClearPanels()
     self.GoToFIHP()
+
+  def Recalibrate(self, event):
+    print "Recalibrate"
+    if not self.connection.IsConnected():
+        return
+    self.ClearPanels()
+    self.GoToCalibrate()
 
   def MenuHighlighted(self, event):
     pass
