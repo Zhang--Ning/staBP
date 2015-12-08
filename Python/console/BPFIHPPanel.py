@@ -87,7 +87,7 @@ class PeakPlotPanel(wx.Panel):
         self.xdata = []
         self.ydata = []
 
-        self.plot.StartPlot(self.xdata, self.ydata, (0,100), -1, 'ow')
+        self.plot.StartPlot(self.xdata, self.ydata, (0,100), (0, None), 'ow')
 
     def AddNextPeakPeak(self, motorpos, peaktopeak):
         self.ydata.append(peaktopeak)

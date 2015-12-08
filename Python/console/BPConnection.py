@@ -7,8 +7,10 @@ import wx
 from datetime import datetime
 from collections import deque
 
+from numpy import sin, pi
+
 class BPConnection:
-  def __init__(self, connectedFunc):
+  def __init__(self, connectedFunc, test=False):
     self.acdcFunc = None
     self.cmdlistener = None
     self.connectedFunc = connectedFunc
@@ -21,11 +23,23 @@ class BPConnection:
 
     self.acdc = deque([])
     self.lastacdc = 0
-    print "RESETCOMMANDWAIT"
     self.commandwait = 0
+    self.test = test
+    if(test):
+      self.testt = 0
+      wx.CallLater(5,self.RunTest)
+
+  def RunTest(self):
+    self.testt = (self.testt + 0.063) % 1
+    if(self.acdcFunc != None):
+      self.acdcFunc(40*sin(2*pi*self.testt)+100, 5)
+    wx.CallLater(5, self.RunTest)
 
   def SetACDCListener(self, acdcFunc):
     self.acdcFunc = acdcFunc
+
+  def IsConnected(self):
+    return self.is_connected
 
   def Connect(self, port):
     if(port == ""):
@@ -51,10 +65,8 @@ class BPConnection:
       char = self.connection.read(num_waiting)
       if char.find("\r") != -1:
         if(self.cmdlistener != None):
-          print "Commands left: " + str(self.commandwait)
           self.commandwait -= 1
           if(self.commandwait <= 0):
-            print "COMPLETED: " + str(self.cmdlistener)
             self.commandwait = 0
             self.cmdlistener()
       else:

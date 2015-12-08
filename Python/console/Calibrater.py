@@ -14,7 +14,7 @@ class Calibrater:
 
 		self.calibration_window = 400
 		self.pressure_samples = 100
-		self.ma_window = 10
+		self.ma_window = 20
 
 	def Calibrate(self, pressures):
 		self.systolic = pressures[0]

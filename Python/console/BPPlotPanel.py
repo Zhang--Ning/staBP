@@ -29,14 +29,11 @@ class PlotPanel(wx.Panel):
         self.dataplot, = self.axes.plot(initial_x, initial_y, style, linewidth=3.0)
         if(xlim != -1):
             self.axes.set_xlim(xlim)
-            self.autoscale_x = False
-        else:
-            self.autoscale_x = True
         if(ylim != -1):
             self.axes.set_ylim(ylim)
-            self.autoscale_y = False
-        else:
-            self.autoscale_y = True
+
+        self.xlim = xlim
+        self.ylim = ylim
         self.axes.grid(True, color="w")
         self.render = True
 
@@ -46,11 +43,19 @@ class PlotPanel(wx.Panel):
         self.dataplot.set_data(new_x, new_y)
 
     def Render(self):
-        if self.render and len(self.xdata) > 0 and len(self.xdata) == len(self.ydata):   
-            if(self.autoscale_x and len(self.xdata) > 1):
-                self.axes.set_xlim((min(self.xdata), max(self.xdata)))
-            if(self.autoscale_y and len(self.ydata) > 1):
-                self.axes.set_ylim((min(self.ydata), max(self.ydata)))
+        if self.render and len(self.xdata) > 0 and len(self.xdata) == len(self.ydata):
+            xlim = list(self.xlim)
+            ylim = list(self.ylim)
+            if(self.xlim[0] == None):
+                xlim[0] = min(self.xdata)-1
+            if(self.xlim[1] == None):
+                xlim[1] = max(self.xdata)+1
+            if(self.ylim[0] == None):
+                ylim[0] = min(self.ydata)-1
+            if(self.ylim[1] == None):
+                ylim[1] = max(self.ydata)+1
+            self.axes.set_xlim(xlim)
+            self.axes.set_ylim(ylim)
             self.canvas.draw()
             self.canvas.Refresh()
         wx.CallLater(50, self.Render)
