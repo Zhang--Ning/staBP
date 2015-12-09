@@ -16,6 +16,9 @@ class Calibrater:
 		self.pressure_samples = 100
 		self.ma_window = 20
 
+	def Reset(self):
+		Calibrater.__init__(self, self.connection, self.doneCalibrating)
+		
 	def Calibrate(self, pressures):
 		self.systolic = pressures[0]
 		self.diastolic = pressures[1]

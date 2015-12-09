@@ -49,6 +49,10 @@ class FIHPPanel(wx.Panel):
             self.time = 0
             wx.CallLater(1000, self.NextSim)
 
+    def ResetPanel(self):
+        self.motor.SetProgress(0)
+        self.peakpeakplot.ClearPlot()
+
     def NextSim(self):
         self.time = (self.time + 0.063)
         if(self.time > 1):
@@ -89,6 +93,12 @@ class PeakPlotPanel(wx.Panel):
 
         self.plot.StartPlot(self.xdata, self.ydata, (0,100), (0, None), 'ow')
 
+    def ClearPlot(self):
+        self.xdata = []
+        self.ydata = []
+
+        self.plot.StartPlot(self.xdata, self.ydata, (0,100), (0, None), 'ow')
+        
     def AddNextPeakPeak(self, motorpos, peaktopeak):
         self.ydata.append(peaktopeak)
         self.xdata.append(motorpos)

@@ -35,11 +35,14 @@ class PlotPanel(wx.Panel):
         self.xlim = xlim
         self.ylim = ylim
         self.axes.grid(True, color="w")
-        self.render = True
+        if len(self.xdata) > 0:
+            self.render = True
 
     def UpdatePlot(self, new_x, new_y):
         self.xdata = new_x
         self.ydata = new_y
+        if len(self.xdata) > 0:
+            self.render = True
         self.dataplot.set_data(new_x, new_y)
 
     def Render(self):

@@ -37,6 +37,10 @@ class MonitorPanel(wx.Panel):
     self.reading_panel.GetSizer().Add(self.systolic_panel, 50, wx.EXPAND)
     self.reading_panel.GetSizer().Add(self.diastolic_panel, 50, wx.EXPAND)
 
+  def ResetPanel(self):
+    self.SetPressure(0, 0)
+    self.plot_panel.ClearPlot()
+
   def AddRawPressure(self, pressure):
     self.plot_panel.AddNextBP(pressure)
 
@@ -95,11 +99,17 @@ class MonitorPlotPanel(wx.Panel):
 
         self.bpindex = 0
 
-        self.plot.StartPlot(self.xdata, self.ydata, (0,99), (40,200), '-w')
-
         if False:
             self.time = 0
             wx.CallLater(10, self.NextSim)
+
+    def ClearPlot(self):
+        self.xdata = range(100)
+        self.ydata = [80]*100
+
+        self.bpindex = 0
+
+        self.plot.StartPlot(self.xdata, self.ydata, (0,99), (40,200), '-w')
 
     def NextSim(self):
         self.time = (self.time + 0.063) % 1

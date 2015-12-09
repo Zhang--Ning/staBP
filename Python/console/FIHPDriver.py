@@ -20,6 +20,9 @@ class FIHPDriver:
 	  	self.samples_per_step = 300
 	  	self.total_steps = 50
 
+	def Reset(self):
+		FIHPDriver.__init__(self, self.connection, self.dataPointFunc, self.completedFunc)
+
 	def Update(self):
 		if self.state == "RETRACT":
 			self.state = "SWEEP"

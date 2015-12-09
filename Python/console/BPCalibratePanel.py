@@ -66,6 +66,9 @@ class CalibratePanel(wx.Panel):
 
     self.sizer.Add(self.textPanel, 3, flag=wx.CENTER)
 
+  def ResetPanel(self):
+    pass
+
   def LimitToInt(self, event):
     keycode = event.GetKeyCode()
     if keycode < 255:

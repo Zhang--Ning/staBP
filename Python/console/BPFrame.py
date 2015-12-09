@@ -14,7 +14,7 @@ from Calibrater import Calibrater
 class BPFrame(wx.Frame):
   def __init__(self):
     no_resize_style = wx.DEFAULT_FRAME_STYLE & ~ (wx.RESIZE_BORDER | wx.RESIZE_BOX | wx.MAXIMIZE_BOX)
-    wx.Frame.__init__(self, None, title="Blood Pressure Program", pos = (5,20), size=(1024, 640), style=no_resize_style)
+    wx.Frame.__init__(self, None, title="Blood Pressure Program", pos = (5,20), size=(768, 480), style=no_resize_style)
     self.SetBackgroundColour(wx.Colour(236, 236, 236))
 
     ## Set up menu
@@ -47,13 +47,17 @@ class BPFrame(wx.Frame):
 
     self.select_panel = SelectDevicePanel(self, self.connection, self.GoToPosition)
 
-    self.monitor_panel = wx.Panel(self)
-    self.position_panel = wx.Panel(self)
-    self.fihp_panel = wx.Panel(self)
-    self.calibrate_panel = wx.Panel(self)
+    self.position_panel = PositionPanel(self, self.GoToFIHP)
+    self.fihp_panel = FIHPPanel(self, self.GoToCalibrate, test=False)
+    self.calibrater = Calibrater(self.connection, self.GoToMonitor)
+    self.calibrate_panel = CalibratePanel(self, self.calibrater.Calibrate)
+    self.monitor_panel = MonitorPanel(self)
+    self.driver = FIHPDriver(self.connection, self.fihp_panel.AddNextPoint, self.fihp_panel.Done)
 
-    self.sizer.Add(self.navigation_bar, 1, flag=wx.EXPAND)
+    self.ClearPanels()
+
     self.sizer.Add(self.select_panel, 3, flag=wx.EXPAND)
+    self.select_panel.Show(True)
 
     # self.GoToPosition("")
     # time.sleep(0.5)
@@ -82,7 +86,7 @@ class BPFrame(wx.Frame):
     self.ClearPanels()
     self.connection.Connect(selected) 
     self.SetConnectedText(selected)
-    self.position_panel = PositionPanel(self, self.GoToFIHP)
+    self.position_panel.ResetPanel()
     self.position_panel.Show(True)
     self.sizer.Add(self.position_panel, 3, flag=wx.EXPAND)
     self.sizer.Layout()
@@ -90,17 +94,17 @@ class BPFrame(wx.Frame):
 
   def GoToFIHP(self):
     self.ClearPanels()
-    self.fihp_panel = FIHPPanel(self, self.GoToCalibrate, test=False)
+    self.fihp_panel.ResetPanel()
+    self.driver.Reset()
     self.fihp_panel.Show(True)
     self.sizer.Add(self.fihp_panel, 3, flag=wx.EXPAND)
     self.sizer.Layout()
     self.navigation_bar.SelectItem(1)
-    self.driver = FIHPDriver(self.connection, self.fihp_panel.AddNextPoint, self.fihp_panel.Done)
 
   def GoToCalibrate(self):
     self.ClearPanels()
-    self.calibrater = Calibrater(self.connection, self.GoToMonitor)
-    self.calibrate_panel = CalibratePanel(self, self.calibrater.Calibrate)
+    self.calibrater.Reset()
+    self.calibrate_panel.ResetPanel()
     self.calibrate_panel.Show(True)
     self.sizer.Add(self.calibrate_panel, 3, flag=wx.EXPAND)
     self.sizer.Layout()
@@ -108,7 +112,7 @@ class BPFrame(wx.Frame):
 
   def GoToMonitor(self):
     self.ClearPanels()
-    self.monitor_panel = MonitorPanel(self)
+    self.monitor_panel.ResetPanel()
     self.monitor_panel.Show(True)
     self.sizer.Add(self.monitor_panel, 3, flag=wx.EXPAND)
     self.sizer.Layout()
@@ -121,14 +125,12 @@ class BPFrame(wx.Frame):
     print "Find IHP"
     if not self.connection.IsConnected():
         return
-    self.ClearPanels()
     self.GoToFIHP()
 
   def Recalibrate(self, event):
     print "Recalibrate"
     if not self.connection.IsConnected():
         return
-    self.ClearPanels()
     self.GoToCalibrate()
 
   def MenuHighlighted(self, event):

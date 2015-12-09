@@ -32,3 +32,6 @@ class PositionPanel(wx.Panel):
     self.textPanel.GetSizer().AddStretchSpacer(1)
     self.textPanel.GetSizer().Add(self.continueText, 1)
     self.sizer.Add(self.textPanel, 3, flag=wx.CENTER)
+
+  def ResetPanel(self):
+    pass
