@@ -52,7 +52,7 @@ class BPFrame(wx.Frame):
     self.calibrater = Calibrater(self.connection, self.GoToMonitor)
     self.calibrate_panel = CalibratePanel(self, self.calibrater.Calibrate)
     self.monitor_panel = MonitorPanel(self)
-    self.driver = FIHPDriver(self.connection, self.fihp_panel.AddNextPoint, self.fihp_panel.Done)
+    self.driver = FIHPDriver(self.connection, self.fihp_panel.UpdateMotor, self.fihp_panel.AddNextPoint, self.fihp_panel.Done)
 
     self.ClearPanels()
 

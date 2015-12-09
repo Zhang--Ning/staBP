@@ -66,6 +66,9 @@ class FIHPPanel(wx.Panel):
 
     def AddNextPoint(self, motor_percentage, peaktopeak):
         self.peakpeakplot.AddNextPeakPeak(int(motor_percentage*100), peaktopeak)
+
+    def UpdateMotor(self, motor_percentage):
+        print "Progress: " + str(motor_percentage)
         self.motor.SetProgress(int(motor_percentage*100))
 
     def Done(self):

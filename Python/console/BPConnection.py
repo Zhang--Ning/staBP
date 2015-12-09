@@ -14,6 +14,7 @@ class BPConnection:
     self.acdcFunc = None
     self.cmdlistener = None
     self.connectedFunc = connectedFunc
+    self.detailListen = None
 
     self.is_connected = False
 
@@ -64,6 +65,9 @@ class BPConnection:
     if(num_waiting):
       char = self.connection.read(num_waiting)
       if char.find("\r") != -1:
+
+        if(self.detailListen != None):
+          self.detailListen()
         if(self.cmdlistener != None):
           self.commandwait -= 1
           if(self.commandwait <= 0):
@@ -102,36 +106,40 @@ class BPConnection:
 
     wx.CallLater(1, self.DistributeACDC)
 
-  def AdvanceMotor(self, listener, steps):
+  def AdvanceMotor(self, listener, steps, detailListen=None):
     if not self.is_connected:
       return
     print "Advance"
     self.commandwait = steps
     self.cmdlistener = listener
+    self.detailListen = detailListen
     self.connection.write("f"*steps)
 
-  def RetractMotor(self, listener, steps):
+  def RetractMotor(self, listener, steps, detailListen=None):
     if not self.is_connected:
       return
     print "Retract"
     self.commandwait = steps
     self.cmdlistener = listener
+    self.detailListen = detailListen
     self.connection.write("r"*steps)
 
-  def MotorEnable(self, listener):
+  def MotorEnable(self, listener, detailListen=None):
     if not self.is_connected:
       return
     print "====ENABLE MOTOR====="
     self.commandwait = 1
     self.cmdlistener = listener
+    self.detailListen = detailListen
     self.connection.write('e')
 
-  def MotorDisable(self, listener):
+  def MotorDisable(self, listener, detailListen=None):
     if not self.is_connected:
       return
     print "====DISABLE MOTOR====="
     self.commandwait = 1
     self.cmdlistener = listener
+    self.detailListen = detailListen
     self.connection.write('d')
 
   def GetAvailablePorts(self):
