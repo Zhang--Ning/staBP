@@ -4,8 +4,8 @@ class Button(wx.StaticText):
   def __init__(self, parent, clickHandler, textlabel="Continue"):
     wx.StaticText.__init__(self, parent, label=textlabel + " \xe2\x9e\x94")
     self.font = wx.Font(12, wx.FONTFAMILY_DEFAULT, wx.NORMAL, wx.NORMAL, faceName="Helvetica Neue")
-    self.color_normal = wx.Colour(0, 209, 245)
-    self.color_hover = wx.Colour(0, 167, 195)
+    self.color_normal = wx.Colour(230, 0, 0)
+    self.color_hover = wx.Colour(180, 0, 0)
     self.SetForegroundColour(self.color_normal)
     self.Bind(wx.EVT_LEFT_UP, self.Clicked)
     self.Bind(wx.EVT_ENTER_WINDOW, self.HoverOn)

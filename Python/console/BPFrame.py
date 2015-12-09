@@ -43,12 +43,12 @@ class BPFrame(wx.Frame):
     self.navigation_bar = BPNav.NavBar(self)
 
     ## Set up main panel
-    self.connection = BPConnection(None, test=True)
+    self.connection = BPConnection(None, test=False)
 
     self.select_panel = SelectDevicePanel(self, self.connection, self.GoToPosition)
 
     self.position_panel = PositionPanel(self, self.GoToFIHP)
-    self.fihp_panel = FIHPPanel(self, self.GoToCalibrate, test=True)
+    self.fihp_panel = FIHPPanel(self, self.GoToCalibrate, test=False)
     self.calibrater = Calibrater(self.connection, self.GoToMonitor)
     self.calibrate_panel = CalibratePanel(self, self.calibrater.Calibrate)
     self.monitor_panel = MonitorPanel(self)
@@ -89,8 +89,8 @@ class BPFrame(wx.Frame):
     self.position_panel.ResetPanel()
     self.position_panel.Show(True)
     self.sizer.Add(self.position_panel, 3, flag=wx.EXPAND)
-    self.sizer.Layout()
     self.navigation_bar.SelectItem(1)
+    self.sizer.Layout()
 
   def GoToFIHP(self):
     self.ClearPanels()
@@ -98,8 +98,8 @@ class BPFrame(wx.Frame):
     self.driver.Reset()
     self.fihp_panel.Show(True)
     self.sizer.Add(self.fihp_panel, 3, flag=wx.EXPAND)
+    self.navigation_bar.SelectItem(2)
     self.sizer.Layout()
-    self.navigation_bar.SelectItem(1)
 
   def GoToCalibrate(self):
     self.ClearPanels()
@@ -107,16 +107,16 @@ class BPFrame(wx.Frame):
     self.calibrate_panel.ResetPanel()
     self.calibrate_panel.Show(True)
     self.sizer.Add(self.calibrate_panel, 3, flag=wx.EXPAND)
+    self.navigation_bar.SelectItem(3)
     self.sizer.Layout()
-    self.navigation_bar.SelectItem(1)
 
   def GoToMonitor(self):
     self.ClearPanels()
     self.monitor_panel.ResetPanel()
     self.monitor_panel.Show(True)
     self.sizer.Add(self.monitor_panel, 3, flag=wx.EXPAND)
+    self.navigation_bar.SelectItem(4)
     self.sizer.Layout()
-    self.navigation_bar.SelectItem(2)
     self.calibrater.SetRawPressureListener(self.monitor_panel.AddRawPressure)
     self.calibrater.SetPressureListener(self.monitor_panel.SetPressure)
     self.calibrater.StartRecording()

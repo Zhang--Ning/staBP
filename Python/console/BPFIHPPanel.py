@@ -122,7 +122,7 @@ class MotorProgress(wx.Panel):
     self.bar.SetBackgroundColour("black")
 
     self.progress = wx.Panel(self.bar)
-    self.progress.SetBackgroundColour(wx.Colour(100, 100, 200))
+    self.progress.SetBackgroundColour(wx.Colour(226, 71, 24))
     self.SetProgress(100)
     
     if False:
