@@ -43,12 +43,12 @@ class BPFrame(wx.Frame):
     self.navigation_bar = BPNav.NavBar(self)
 
     ## Set up main panel
-    self.connection = BPConnection(None, test=False)
+    self.connection = BPConnection(None, test=True)
 
     self.select_panel = SelectDevicePanel(self, self.connection, self.GoToPosition)
 
     self.position_panel = PositionPanel(self, self.GoToFIHP)
-    self.fihp_panel = FIHPPanel(self, self.GoToCalibrate, test=False)
+    self.fihp_panel = FIHPPanel(self, self.GoToCalibrate, test=True)
     self.calibrater = Calibrater(self.connection, self.GoToMonitor)
     self.calibrate_panel = CalibratePanel(self, self.calibrater.Calibrate)
     self.monitor_panel = MonitorPanel(self)
