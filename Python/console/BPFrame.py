@@ -65,7 +65,7 @@ class BPFrame(wx.Frame):
     # time.sleep(0.5)
     # self.GoToCalibrate()
     # time.sleep(0.5)
-    # self.GoToMonitor()
+    self.GoToMonitor()
     # time.sleep(0.5)
 
     self.Show(True)

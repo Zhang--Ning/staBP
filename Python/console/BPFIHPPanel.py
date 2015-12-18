@@ -86,7 +86,7 @@ class PeakPlotPanel(wx.Panel):
         self.plot.SetMaxSize((-1, -1))
         self.sizer.Add(self.plot, 20, wx.EXPAND)
         self.sizer.AddStretchSpacer(1)
-        self.scale = Scale(self, "Volts", "", wx.ALIGN_LEFT, False)
+        self.scale = Scale(self, "Volts\n(Peak-Peak)", "", wx.ALIGN_LEFT, False)
         self.sizer.Add(self.scale, 0, wx.EXPAND)
         self.sizer.AddStretchSpacer(1)
         self.sizer.Layout()
